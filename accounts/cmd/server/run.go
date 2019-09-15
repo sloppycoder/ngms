@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/sloppycoder/ngms/accounts/app/server"
 
 	"github.com/izumin5210/grapi/pkg/grapiserver"
 )
@@ -13,7 +14,7 @@ func run() error {
 	s := grapiserver.New(
 		grapiserver.WithDefaultLogger(),
 		grapiserver.WithServers(
-		// TODO
+			server.NewAccountServiceServer(),
 		),
 	)
 	return s.ServeContext(ctx)
