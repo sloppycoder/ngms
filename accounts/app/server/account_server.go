@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	api_pb "github.com/sloppycoder/ngms/accounts/api"
+	repo "github.com/sloppycoder/ngms/accounts/app/repo"
 )
 
 // AccountServiceServer is a composite interface of api_pb.AccountServiceServer and grapiserver.Server.
@@ -26,6 +27,14 @@ type accountServiceServerImpl struct {
 }
 
 func (s *accountServiceServerImpl) GetAccount(ctx context.Context, req *api_pb.GetAccountRequest) (*api_pb.Account, error) {
-	// TODO: Not yet implemented.
-	return nil, status.Error(codes.Unimplemented, "TODO: You should implement it!")
+	if req.AccountId == "" || req.AccountId == "0" {
+		return nil, status.Error(codes.InvalidArgument, "Invalid account id")
+	}
+
+	acc, err := repo.GetAccountById(ctx, req.AccountId)
+	if err != nil {
+		return nil, status.Error(codes.Unavailable, "Unable to retrieve account")
+	}
+
+	return acc, nil
 }
