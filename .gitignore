@@ -1,0 +1,8 @@
+*.bak
+*.so
+*.*~
+**/vendor
+**/bin
+**/tmp
+**/.idea
+**/server
