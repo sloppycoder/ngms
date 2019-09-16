@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"google.golang.org/grpc/grpclog"
 
 	// "github.com/golang/protobuf/ptypes/empty"
 	"github.com/izumin5210/grapi/pkg/grapiserver"
@@ -27,12 +28,15 @@ type accountServiceServerImpl struct {
 }
 
 func (s *accountServiceServerImpl) GetAccount(ctx context.Context, req *api_pb.GetAccountRequest) (*api_pb.Account, error) {
-	if req.AccountId == "" || req.AccountId == "0" {
+	id := req.AccountId
+	if "" == id || "0" == id {
+		grpclog.Infof("invalid account id: %s", id)
 		return nil, status.Error(codes.InvalidArgument, "Invalid account id")
 	}
 
-	acc, err := repo.GetAccountById(ctx, req.AccountId)
+	acc, err := repo.GetAccountById(ctx, id)
 	if err != nil {
+		grpclog.Infof("unable to retrieve account summary for %s", id)
 		return nil, status.Error(codes.Unavailable, "Unable to retrieve account")
 	}
 

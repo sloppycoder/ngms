@@ -18,6 +18,7 @@ func Test_AccountServiceServer_GetAccount(t *testing.T) {
 		})
 
 	assert.NotNil(t, resp)
+	assert.EqualValues(t, resp.ProdCode, "1122")
 	assert.Nil(t, err)
 }
 
