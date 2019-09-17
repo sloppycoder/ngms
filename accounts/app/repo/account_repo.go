@@ -18,6 +18,8 @@ const (
 
 func GetAccountById(ctx context.Context, id string) (*api_pb.Account, error) {
 	db := db(ctx)
+	defer db.Client().Disconnect(ctx)
+
 	cur := db.Collection("accounts").FindOne(ctx, bson.M{"accountId": id})
 	if err := cur.Err(); err != nil {
 		return nil, err
