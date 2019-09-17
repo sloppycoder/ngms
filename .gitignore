@@ -1,7 +1,10 @@
 *.bak
 *.so
+*.pyc
 *.*~
 **/vendor
 **/bin
 **/tmp
 **/.idea
+**/__pycache__
+accounts/server
