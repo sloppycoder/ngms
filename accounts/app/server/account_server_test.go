@@ -18,8 +18,8 @@ func Test_AccountServiceServer_GetAccount(t *testing.T) {
 		})
 
 	assert.NotNil(t, resp)
-	assert.EqualValues(t, resp.ProdCode, "1122")
 	assert.Nil(t, err)
+	assert.EqualValues(t, resp.ProdCode, "1122")
 }
 
 func Test_AccountServiceServer_GetAccount_Invalid_AccountId(t *testing.T) {
