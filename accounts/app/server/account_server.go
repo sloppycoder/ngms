@@ -36,7 +36,7 @@ func (s *accountServiceServerImpl) GetAccount(ctx context.Context, req *api_pb.G
 
 	acc, err := repo.GetAccountById(ctx, id)
 	if err != nil {
-		grpclog.Infof("unable to retrieve account summary for %s", id)
+		grpclog.Infof("unable to retrieve account summary for %s %s", id, err)
 		return nil, status.Error(codes.Unavailable, "Unable to retrieve account")
 	}
 
