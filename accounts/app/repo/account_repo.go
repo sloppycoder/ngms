@@ -18,30 +18,75 @@ const (
 
 func GetAccountById(ctx context.Context, id string) (*api_pb.Account, error) {
 	db := db(ctx)
-	defer db.Client().Disconnect(ctx)
+	//defer db.Client().Disconnect(ctx)
 
-	cur := db.Collection("accounts").FindOne(ctx, bson.M{"accountId": id})
+	cur := db.Collection("accounts").FindOne(ctx, bson.M{"accountId": "100-1234-5577-890"})
 	if err := cur.Err(); err != nil {
 		return nil, err
 	}
 
+	account, err := fetchAccount(cur)
+	if err != nil {
+		return nil, err
+	}
+
+	return account, nil
+}
+
+var _db *mongo.Database
+
+func db(ctx context.Context) *mongo.Database {
+	if _db != nil {
+		return _db
+	}
+
+	clientOpts := options.Client().ApplyURI(DBURI).SetMinPoolSize(10).SetMaxPoolSize(100)
+	client, err := mongo.Connect(ctx, clientOpts)
+	if err != nil {
+		grpclog.Error(err)
+	}
+
+	_db = client.Database(DBName)
+	return _db
+}
+
+func xfetchAccount(cur *mongo.SingleResult) (*api_pb.Account, error) {
+	var acc api_pb.Account
+	err := cur.Decode(&acc)
+	if err != nil {
+		return nil, err
+	}
+	return &acc, nil
+}
+
+func fetchAccount(cur *mongo.SingleResult) (*api_pb.Account, error) {
 	// TODO:
 	//  rewrite decodeRaw logic with a more concise method
 	// this code is ugly!
 
 	raw, err := cur.DecodeBytes()
+	if err != nil {
+		return nil, err
+	}
+
 	var ob map[string]interface{}
 	_ = bson.Unmarshal(raw, &ob)
 
-	balances := make([]*api_pb.Balance, 2)
+	acc := api_pb.Account{
+		AccountId: ob["accountId"].(string),
+		ProdCode:  ob["prodCode"].(string),
+		ProdName:  ob["prodName"].(string),
+		Balances:  nil,
+	}
 
 	if ob["balances"] != nil {
-		bt, err := strconv.Atoi(ob["balances"].(primitive.A)[0].(map[string]interface{})["type"].(string))
-		if err == nil {
+		balances := make([]*api_pb.Balance, 2)
 
+		bt1, err1 := strconv.Atoi(ob["balances"].(primitive.A)[0].(map[string]interface{})["type"].(string))
+		if err1 == nil {
 			balances[0] = &api_pb.Balance{
 				Amount:     ob["balances"].(primitive.A)[0].(map[string]interface{})["amount"].(float64),
-				Type:       api_pb.Balance_Type(bt),
+				Type:       api_pb.Balance_Type(bt1),
 				CreditFlag: ob["balances"].(primitive.A)[0].(map[string]interface{})["creditFlag"].(bool),
 			}
 		}
@@ -54,28 +99,9 @@ func GetAccountById(ctx context.Context, id string) (*api_pb.Account, error) {
 				CreditFlag: ob["balances"].(primitive.A)[1].(map[string]interface{})["creditFlag"].(bool),
 			}
 		}
+
+		acc.Balances = balances
 	}
 
-	account := api_pb.Account{
-		AccountId: ob["accountId"].(string),
-		ProdCode:  ob["prodCode"].(string),
-		ProdName:  ob["prodName"].(string),
-		Balances:  balances,
-	}
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &account, nil
-}
-
-func db(ctx context.Context) *mongo.Database {
-	clientOpts := options.Client().ApplyURI(DBURI)
-	client, err := mongo.Connect(ctx, clientOpts)
-	if err != nil {
-		grpclog.Error(err)
-	}
-
-	return client.Database(DBName)
+	return &acc, nil
 }
