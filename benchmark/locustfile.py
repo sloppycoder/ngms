@@ -7,5 +7,5 @@ class InvokeAccountsApi(TaskSet):
 
 class ApiStressTest(HttpLocust):
     task_set = InvokeAccountsApi
-    min_wait = 100
-    max_wait = 100
+    min_wait = 10
+    max_wait = 10
