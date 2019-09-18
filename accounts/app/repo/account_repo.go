@@ -18,9 +18,8 @@ const (
 
 func GetAccountById(ctx context.Context, id string) (*api_pb.Account, error) {
 	db := db(ctx)
-	//defer db.Client().Disconnect(ctx)
 
-	cur := db.Collection("accounts").FindOne(ctx, bson.M{"accountId": "100-1234-5577-890"})
+	cur := db.Collection("accounts").FindOne(ctx, bson.M{"accountId": id})
 	if err := cur.Err(); err != nil {
 		return nil, err
 	}
@@ -47,6 +46,7 @@ func db(ctx context.Context) *mongo.Database {
 	}
 
 	_db = client.Database(DBName)
+	// TODO: when do I disconnect?
 	return _db
 }
 
