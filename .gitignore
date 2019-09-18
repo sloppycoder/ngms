@@ -8,3 +8,4 @@
 **/.idea
 **/__pycache__
 accounts/server
+benchmark/slave

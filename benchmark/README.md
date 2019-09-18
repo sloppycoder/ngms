@@ -1,35 +1,14 @@
 ## benchmark the API using locust
 
-Use [Locust.io](http://locust.io) to benchmark API.
+Use [Locust.io](http://locust.io) to benchmark APIs. For my testing Locust can't generate more than 2000 TPS of loan even with 2 slaves, so I switched to use [Boomer](https://github.com/myzhan/boomer) load generator, which can generate tons of requests using 1 single process.
 
-### install
+### Install Locust
 ```
  conda install -c conda-forge locust
- conda install -c conda-forge googleapis-common-protocs-grpc
- conda install -c conda-forge grpcio-tools
 
 ```
 
-### run python gRPC client
-```
-python -m grpc_tools.protoc -I../accounts/api/protos -I . --python_out=. --grpc_python_out=. ../accounts/api/protos/account.proto
-
-python client.py
-
-# should print out something like below
-
-ccount_id: "100-1234-5577-891"
-prod_code: "1122"
-prod_name: "Super Saver Account"
-balances {
-  amount: 10100.0
-}
-balances {
-  amount: 9000.0
-  type: AVAILABLE
-}
-
-### run locust
+### Run Locust for testing REST only
 ```
 locust --host http://127.0.0.1:3000
 
@@ -43,5 +22,24 @@ locust --slave
 
 ```
 
+### Run Locust master and Boomer as slave
+```
+
+# build slave binary
+go build -o slave main.go
+
+# start locust master, content of locusfile.py will not be used by Boomer
+locust --master
+
+# start slave, 1 single process is enough for more than 20000TPS of load
+# use the -proto flag to control rest of grpc endpoint to test
+
+./slave -proto rest 
+or
+./slave -proto grpc
+
+use --help flag to see all flags supported by Boomer
+
+```
 
 
