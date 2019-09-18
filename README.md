@@ -12,8 +12,7 @@ The benefits of the architecture:
 ## Interface
 1. protobuf interface spec
 2. generate golang skeleton
-3. generate java client skeleton
-4. (optional) generate swagger spec from spec
+3. generate python client skeleton
 
 ## Data
 1. create Mongo database
@@ -21,14 +20,11 @@ The benefits of the architecture:
 
 ## Golang micro service
 1. create gRPC microservice
-	* framework go-kit vs echo
-	* enable JWT or not
-	* entitlement check before data access
-2. envoy / other proxy REST to gRPC gateway
-3. (??) additional REST transport in micro servie itself
+	* framework [grapi](https://github.com/izumin5210/grapi)
+2. use grapi's builtin [REST/gRPC gateway](https://github.com/grpc-ecosystem/grpc-gateway)
 4. test locally with minikube/skaffold
 
 ## Load Test
-1. create load generator use jmeter/gatlin/locus/?
+1. create load generator [locust](http://locust.io) with Golang load generator slave [Boomer](https://github.com/myzhan/boomer)
 2. test with gRPC and REST, see comparison
 3. (?) chao monkey
