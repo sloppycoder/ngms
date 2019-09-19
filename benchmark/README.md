@@ -22,5 +22,20 @@ locust --slave
 
 ```
 
+### run locust master with boomer load generator
+```
+# build slave
+go build slave.go
+
+# start locust master and Web UI
+locust --master
+
+# test gRPC API
+./slave -proto grpc
+
+# test with REST API
+./slave -proto rest
+
+```
 
 

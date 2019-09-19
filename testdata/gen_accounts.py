@@ -30,7 +30,7 @@ def gen_prod(rand):
 
 
 def gen_account(n):
-    p = Person()
+    p = Person(locales.EN)
     r = random.Random()
     for i in range(n):
         account_id = unique_account_id(p)
