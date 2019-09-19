@@ -14,12 +14,12 @@ func Test_AccountServiceServer_GetAccount(t *testing.T) {
 
 	resp, err := svr.GetAccount(ctx,
 		&api_pb.GetAccountRequest{
-			AccountId: "100-1234-5577-890",
+			AccountId: "100-1122-5577-891",
 		})
 
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
-	assert.EqualValues(t, resp.ProdCode, "1122")
+	assert.EqualValues(t, resp.ProdCode, "1220")
 }
 
 func Test_AccountServiceServer_GetAccount_Invalid_AccountId(t *testing.T) {

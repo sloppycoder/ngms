@@ -7,8 +7,11 @@ require (
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.8.5
 	github.com/izumin5210/grapi v0.4.2
+	github.com/jinzhu/copier v0.0.0-20190625015134-976e0346caa8
+	github.com/mattn/go-isatty v0.0.4 // indirect
+	github.com/onsi/ginkgo v1.7.0 // indirect
+	github.com/onsi/gomega v1.4.3 // indirect
 	github.com/prometheus/client_golang v1.1.0
-	github.com/slok/go-http-metrics v0.4.0
 	github.com/stretchr/testify v1.4.0
 	github.com/tidwall/pretty v1.0.0 // indirect
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect
