@@ -31,6 +31,3 @@ spec:
       containers:
         - name: account
           image: gcr.io/k8s-skaffold/skaffold-account
-          ports:
-            - containerPort: 3000
-            - containerPort: 3001
