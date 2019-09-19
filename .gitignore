@@ -4,6 +4,7 @@
 *.*~
 *.iml
 *.swp
+*.gz
 **/vendor
 **/tmp
 **/.idea
