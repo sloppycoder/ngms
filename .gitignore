@@ -2,12 +2,19 @@
 *.so
 *.pyc
 *.*~
+*.iml
+*.swp
 **/vendor
-**/bin
 **/tmp
 **/.idea
 **/__pycache__
-*.iml
-*.swp
+
+# test data
+testdata/*.json
+testdata/*.txt
+benchmark/ids.txt
+
+# binaries
+**/bin/*
 accounts/server
 benchmark/slave
