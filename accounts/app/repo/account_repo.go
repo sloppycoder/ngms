@@ -8,12 +8,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc/grpclog"
+	"os"
 	"strconv"
-)
-
-const (
-	DBName = "ngmsdev"
-	DBURI  = "mongodb://dev:pass@127.0.0.1:27017/ngmsdev?authSource=ngmsdev&authMechanism=SCRAM-SHA-256"
 )
 
 func GetAccountById(ctx context.Context, id string) (*api_pb.Account, error) {
@@ -39,13 +35,24 @@ func db(ctx context.Context) *mongo.Database {
 		return _db
 	}
 
-	clientOpts := options.Client().ApplyURI(DBURI).SetMinPoolSize(10).SetMaxPoolSize(100)
+	dbName := os.Getenv("DBNAME")
+	if dbName == "" {
+		dbName = "dev"
+	}
+
+	dbURI := os.Getenv("DBURI")
+	if dbURI == "" {
+		dbURI = "mongodb://dev:dev@127.0.0.1:27017/dev?authSource=dev&authMechanism=SCRAM-SHA-256"
+	}
+	grpclog.Infof("DBURI=%s", dbURI)
+
+	clientOpts := options.Client().ApplyURI(dbURI).SetMinPoolSize(10).SetMaxPoolSize(100)
 	client, err := mongo.Connect(ctx, clientOpts)
 	if err != nil {
 		grpclog.Error(err)
 	}
 
-	_db = client.Database(DBName)
+	_db = client.Database(dbName)
 	// TODO: when do I disconnect?
 	return _db
 }

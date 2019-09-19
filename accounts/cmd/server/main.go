@@ -23,8 +23,8 @@ func run() error {
 
 	s := grapiserver.New(
 		grapiserver.WithDefaultLogger(),
-		grapiserver.WithGrpcAddr("tcp", "[::]:3001"),
-		grapiserver.WithGatewayAddr("tcp", "[::]:3000"),
+		grapiserver.WithGrpcAddr("tcp", "0.0.0.0:3001"),
+		grapiserver.WithGatewayAddr("tcp", "0.0.0.0:3000"),
 		grapiserver.WithServers(
 			server.NewAccountServiceServer(),
 		),
