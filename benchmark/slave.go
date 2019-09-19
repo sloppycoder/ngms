@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -106,18 +107,28 @@ func main() {
 		flag.Parse()
 	}
 
+	restAddr := os.Getenv("RESTSVC_ADDR")
+	if restAddr == "" {
+		restAddr = "http://[::]:3000/accounts"
+	}
+
+	grpcAddr := os.Getenv("GRPCSVC_ADDR")
+	if grpcAddr == "" {
+		grpcAddr = "[::]:3001"
+	}
+
 	var task *boomer.Task
 	if proto == "grpc" {
 		task = &boomer.Task{
 			Name:   "gprc",
 			Weight: 100, // The weight is used to distribute goroutines over multiple tasks.
-			Fn:     setupGrpcApi("gRPC account api", "[::]:3001", randId()),
+			Fn:     setupGrpcApi("gRPC account api", grpcAddr, randId()),
 		}
 	} else {
 		task = &boomer.Task{
 			Name:   "rest",
 			Weight: 100,
-			Fn:     setupRestApi("REST account api", "http://[::]:3000/accounts", randId()),
+			Fn:     setupRestApi("REST account api", restAddr, randId()),
 		}
 	}
 
