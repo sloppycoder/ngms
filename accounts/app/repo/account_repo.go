@@ -1,7 +1,9 @@
-package server
+package repo
 
 import (
 	"context"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	api_pb "github.com/sloppycoder/ngms/accounts/api"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -10,25 +12,49 @@ import (
 	"google.golang.org/grpc/grpclog"
 	"os"
 	"strconv"
+	"time"
+)
+
+var _db *mongo.Database
+var (
+	getAccountSuccess = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "get_account_success_total",
+		Help: "total accounts successfully fetched from database",
+	})
+
+	getAccountFailure = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "get_account_failure_total",
+		Help: "total failed attempts for fetching account from database",
+	})
+
+	getAccountHisto = promauto.NewHistogram(prometheus.HistogramOpts{
+		Name:    "get_account_success_histogram",
+		Help:    "histogram for successful fetch account from database",
+		Buckets: []float64{5, 20, 50, 100, 200, 500, 1000, 2000, 5000},
+	})
 )
 
 func GetAccountById(ctx context.Context, id string) (*api_pb.Account, error) {
 	db := db(ctx)
-
+	start := time.Now()
 	cur := db.Collection("accounts").FindOne(ctx, bson.M{"accountId": id})
+	elapsed := time.Since(start)
+	getAccountHisto.Observe(float64(elapsed) / 1_000) // millisecond
+
 	if err := cur.Err(); err != nil {
+		getAccountFailure.Inc()
 		return nil, err
 	}
 
 	account, err := fetchAccount(cur)
 	if err != nil {
+		getAccountFailure.Inc()
 		return nil, err
 	}
 
+	getAccountSuccess.Inc()
 	return account, nil
 }
-
-var _db *mongo.Database
 
 func db(ctx context.Context) *mongo.Database {
 	if _db != nil {
