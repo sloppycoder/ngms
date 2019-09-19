@@ -11,20 +11,24 @@
 ```
 python -m grpc_tools.protoc -I../accounts/api/protos -I . --python_out=. --grpc_python_out=. ../accounts/api/protos/account.proto
 
-python account_client.py
+python account_client.py <optional_account_id> 
 
 # should print out something like below
 
-ccount_id: "100-1234-5577-891"
-prod_code: "1122"
-prod_name: "Super Saver Account"
+...
+retrieving account info for 4548759848
+result ====>
+id: "5d836a5d02565e5a8db60c1c"
+account_id: "4548759848"
+prod_code: "1002"
+prod_name: "Salary Plus Account"
 balances {
-  amount: 10100.0
+  amount: 148612.8812
 }
 balances {
-  amount: 9000.0
-  type: AVAILABLE
+  amount: 148612.8812
 }
+
 
 ```
 
