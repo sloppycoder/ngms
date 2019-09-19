@@ -7,5 +7,7 @@
 **/tmp
 **/.idea
 **/__pycache__
+*.iml
+*.swp
 accounts/server
 benchmark/slave
