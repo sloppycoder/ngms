@@ -6,7 +6,9 @@ import (
 	"google.golang.org/grpc"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/myzhan/boomer"
@@ -14,12 +16,23 @@ import (
 )
 
 var client api_pb.AccountServiceClient
+var ids *[]string
+var totalIds int
+var rr *rand.Rand
+
+func randId() string {
+	i := rr.Intn(totalIds)
+	if i >=0 && i <= totalIds -1 {
+		return (*ids)[i]
+	}
+	return (*ids)[0]
+}
 
 func invokeGrpcApi(){
 	ctx := context.Background()
 
 	start := time.Now()
-	r, err := client.GetAccount(ctx, &api_pb.GetAccountRequest{AccountId: "100-1234-5577-891"})
+	r, err := client.GetAccount(ctx, &api_pb.GetAccountRequest{AccountId: randId()})
 	elapsed := time.Since(start)
 
 	if err != nil || r == nil {
@@ -35,7 +48,7 @@ func invokeGrpcApi(){
 
 func invokeRestApi(){
 	start := time.Now()
-	r, err := http.Get("http://127.0.0.1:3000/accounts/100-1234-5577-891")
+	r, err := http.Get("http://127.0.0.1:3000/accounts/" + randId())
 	elapsed := time.Since(start)
 
 	if err != nil || r == nil {
@@ -61,6 +74,18 @@ func main(){
 	if !flag.Parsed() {
 		flag.Parse()
 	}
+
+	content, err := ioutil.ReadFile("ids.txt")
+	if err != nil {
+		log.Fatal("cannot open ids.txt file.")
+	}
+
+	lines := strings.Split(string(content), "\n")
+	ids = &lines
+	totalIds = len(lines)
+	log.Printf("using a pool of %d ids", totalIds)
+
+	rr = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	restTask := &boomer.Task{
 		Name: "invokeRestApi",
