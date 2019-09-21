@@ -11,8 +11,8 @@ COPY --from=builder /build/slave /
 RUN pip install locust
 ADD ./locustfile.py ./entrypoint.sh /
 
-ENV RESTSVC_ADDR http://account:3000/accounts
-ENV GRPCSVC_ADDR account:3001
+ENV RESTSVC_ADDR http://accounts-api:3000/accounts
+ENV GRPCSVC_ADDR accounts-api:3001
 ENV SLAVE_PROTO grpc
 ENV DBURI mongodb://dev:dev@db:27017/dev?authSource=dev&authMechanism=SCRAM-SHA-256
 
