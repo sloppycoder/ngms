@@ -32,7 +32,9 @@ Install minikube, skaffold and MongoDB server and tools first. Then
 
 ```
 # populate test data 
-mongoimport --db=dev --collection=accounts < benchmark/seed.json
+cd benchmark
+./seed
+# this will import 1 json document into dev db, accounts collection
 
 # start account svc
 cd accounts
