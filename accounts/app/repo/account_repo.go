@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"github.com/golang/protobuf/ptypes"
 	"github.com/jinzhu/copier"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -16,17 +17,23 @@ import (
 )
 
 type Balance struct {
-	Amount     float64
-	Type       string
-	CreditFlag bool
+	Amount      float64
+	Type        string
+	CreditFlag  bool
+	LastUpdated primitive.DateTime `bson:"last_updated, omitempty"`
 }
 
 type Account struct {
-	Id        primitive.ObjectID `bson:"_id, omitempty"`
-	AccountId string
-	ProdCode  string
-	ProdName  string
-	Balances  []*Balance
+	Id                primitive.ObjectID `bson:"_id, omitempty"`
+	AccountId         string
+	Nickname          string
+	ProdCode          string
+	ProdName          string
+	Currency          string
+	Servicer          string
+	Status            string
+	StatusLastUpdated primitive.DateTime `bson:"status_last_updated, omitempty"`
+	Balances          []*Balance
 }
 
 var _db *mongo.Database
@@ -49,11 +56,10 @@ var (
 )
 
 func GetAccountById(ctx context.Context, id string) (*api_pb.Account, error) {
-	db := db(ctx)
 	start := time.Now()
+
+	db := db(ctx)
 	cur := db.Collection("accounts").FindOne(ctx, bson.M{"accountId": id})
-	elapsed := time.Since(start)
-	getAccountHisto.Observe(float64(elapsed) / 1_000) // millisecond
 
 	if err := cur.Err(); err != nil {
 		getAccountFailure.Inc()
@@ -67,13 +73,38 @@ func GetAccountById(ctx context.Context, id string) (*api_pb.Account, error) {
 		return nil, err
 	}
 
-	var account api_pb.Account
-	copier.Copy(&account, &acc)
-	objId := acc.Id.String()[10:34]
-	account.Id = objId
-	getAccountSuccess.Inc()
+	account, err := mapAccount(&acc)
+	if err != nil {
+		grpclog.Info("Mapping account got error %v", err)
+	}
 
-	return &account, nil
+	getAccountSuccess.Inc()
+	elapsed := time.Since(start)
+	getAccountHisto.Observe(float64(elapsed) / 1_000) // millisecond
+
+	return account, nil
+}
+
+func mapAccount(acc *Account) (*api_pb.Account, error) {
+	var account api_pb.Account
+
+	copier.Copy(&account, &acc)
+	account.Id = acc.Id.String()[10:34] // strip off the ObjectId("...")
+
+	var err error
+	account.StatusLastUpdated, err = ptypes.TimestampProto(acc.StatusLastUpdated.Time())
+
+	for i, bal := range acc.Balances {
+		pbtimestamp, err2 := ptypes.TimestampProto(bal.LastUpdated.Time())
+		account.Balances[i].LastUpdated = pbtimestamp
+		// no sure what we can do about incorrect timestamp here,
+		// just pass back some indicator
+		if err2 != nil && err == nil {
+			err = err2
+		}
+	}
+
+	return &account, err
 }
 
 func db(ctx context.Context) *mongo.Database {

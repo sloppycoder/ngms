@@ -22,11 +22,37 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='ngms.accounts',
   syntax='proto3',
   serialized_options=_b('Z/github.com/sloppycoder/ngms/accounts/api;api_pb'),
-  serialized_pb=_b('\n\raccount.proto\x12\rngms.accounts\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\"y\n\x07\x41\x63\x63ount\x12\n\n\x02id\x18\x01 \x01(\t\x12\x12\n\naccount_id\x18\x02 \x01(\t\x12\x11\n\tprod_code\x18\x03 \x01(\t\x12\x11\n\tprod_name\x18\x04 \x01(\t\x12(\n\x08\x62\x61lances\x18\x05 \x03(\x0b\x32\x16.ngms.accounts.Balance\"\xaf\x01\n\x07\x42\x61lance\x12\x0e\n\x06\x61mount\x18\x01 \x01(\x01\x12)\n\x04type\x18\x02 \x01(\x0e\x32\x1b.ngms.accounts.Balance.Type\x12\x13\n\x0b\x63redit_flag\x18\x03 \x01(\x08\x12\x30\n\x0clast_updated\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\"\n\x04Type\x12\x0b\n\x07\x43URRENT\x10\x00\x12\r\n\tAVAILABLE\x10\x01\"\'\n\x11GetAccountRequest\x12\x12\n\naccount_id\x18\x01 \x01(\t2x\n\x0e\x41\x63\x63ountService\x12\x66\n\nGetAccount\x12 .ngms.accounts.GetAccountRequest\x1a\x16.ngms.accounts.Account\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/accounts/{account_id}B1Z/github.com/sloppycoder/ngms/accounts/api;api_pbb\x06proto3')
+  serialized_pb=_b('\n\raccount.proto\x12\rngms.accounts\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\"\xc7\x02\n\x07\x41\x63\x63ount\x12\n\n\x02id\x18\x01 \x01(\t\x12\x12\n\naccount_id\x18\x02 \x01(\t\x12\x10\n\x08nickname\x18\x03 \x01(\t\x12\x11\n\tprod_code\x18\x04 \x01(\t\x12\x11\n\tprod_name\x18\x05 \x01(\t\x12\x10\n\x08\x63urrency\x18\x06 \x01(\t\x12\x10\n\x08servicer\x18\x07 \x01(\t\x12-\n\x06status\x18\x08 \x01(\x0e\x32\x1d.ngms.accounts.Account.Status\x12\x37\n\x13status_last_updated\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12(\n\x08\x62\x61lances\x18\n \x03(\x0b\x32\x16.ngms.accounts.Balance\".\n\x06Status\x12\n\n\x06\x41\x43TIVE\x10\x00\x12\x0b\n\x07\x42LOCKED\x10\x01\x12\x0b\n\x07\x44ORMANT\x10\x02\"\xaf\x01\n\x07\x42\x61lance\x12\x0e\n\x06\x61mount\x18\x01 \x01(\x01\x12)\n\x04type\x18\x02 \x01(\x0e\x32\x1b.ngms.accounts.Balance.Type\x12\x13\n\x0b\x63redit_flag\x18\x03 \x01(\x08\x12\x30\n\x0clast_updated\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\"\n\x04Type\x12\x0b\n\x07\x43URRENT\x10\x00\x12\r\n\tAVAILABLE\x10\x01\"\'\n\x11GetAccountRequest\x12\x12\n\naccount_id\x18\x01 \x01(\t2x\n\x0e\x41\x63\x63ountService\x12\x66\n\nGetAccount\x12 .ngms.accounts.GetAccountRequest\x1a\x16.ngms.accounts.Account\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/accounts/{account_id}B1Z/github.com/sloppycoder/ngms/accounts/api;api_pbb\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_api_dot_annotations__pb2.DESCRIPTOR,google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,])
 
 
+
+_ACCOUNT_STATUS = _descriptor.EnumDescriptor(
+  name='Status',
+  full_name='ngms.accounts.Account.Status',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='ACTIVE', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='BLOCKED', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='DORMANT', index=2, number=2,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=406,
+  serialized_end=452,
+)
+_sym_db.RegisterEnumDescriptor(_ACCOUNT_STATUS)
 
 _BALANCE_TYPE = _descriptor.EnumDescriptor(
   name='Type',
@@ -45,8 +71,8 @@ _BALANCE_TYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=389,
-  serialized_end=423,
+  serialized_start=596,
+  serialized_end=630,
 )
 _sym_db.RegisterEnumDescriptor(_BALANCE_TYPE)
 
@@ -73,22 +99,57 @@ _ACCOUNT = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='prod_code', full_name='ngms.accounts.Account.prod_code', index=2,
+      name='nickname', full_name='ngms.accounts.Account.nickname', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='prod_name', full_name='ngms.accounts.Account.prod_name', index=3,
+      name='prod_code', full_name='ngms.accounts.Account.prod_code', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='balances', full_name='ngms.accounts.Account.balances', index=4,
-      number=5, type=11, cpp_type=10, label=3,
+      name='prod_name', full_name='ngms.accounts.Account.prod_name', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='currency', full_name='ngms.accounts.Account.currency', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='servicer', full_name='ngms.accounts.Account.servicer', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status', full_name='ngms.accounts.Account.status', index=7,
+      number=8, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status_last_updated', full_name='ngms.accounts.Account.status_last_updated', index=8,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='balances', full_name='ngms.accounts.Account.balances', index=9,
+      number=10, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -98,6 +159,7 @@ _ACCOUNT = _descriptor.Descriptor(
   ],
   nested_types=[],
   enum_types=[
+    _ACCOUNT_STATUS,
   ],
   serialized_options=None,
   is_extendable=False,
@@ -105,8 +167,8 @@ _ACCOUNT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=124,
-  serialized_end=245,
+  serialized_start=125,
+  serialized_end=452,
 )
 
 
@@ -158,8 +220,8 @@ _BALANCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=248,
-  serialized_end=423,
+  serialized_start=455,
+  serialized_end=630,
 )
 
 
@@ -189,11 +251,14 @@ _GETACCOUNTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=425,
-  serialized_end=464,
+  serialized_start=632,
+  serialized_end=671,
 )
 
+_ACCOUNT.fields_by_name['status'].enum_type = _ACCOUNT_STATUS
+_ACCOUNT.fields_by_name['status_last_updated'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _ACCOUNT.fields_by_name['balances'].message_type = _BALANCE
+_ACCOUNT_STATUS.containing_type = _ACCOUNT
 _BALANCE.fields_by_name['type'].enum_type = _BALANCE_TYPE
 _BALANCE.fields_by_name['last_updated'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _BALANCE_TYPE.containing_type = _BALANCE
@@ -232,8 +297,8 @@ _ACCOUNTSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=466,
-  serialized_end=586,
+  serialized_start=673,
+  serialized_end=793,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetAccount',

@@ -17,13 +17,23 @@ service AccountService {
   }
 }
 
-
 message Account {
   string id = 1;
   string account_id = 2;
-  string prod_code = 3;
-  string prod_name = 4;
-  repeated Balance balances = 5;
+  string nickname = 3;
+  string prod_code = 4;
+  string prod_name = 5;
+  string currency = 6;
+  string servicer = 7;
+  Status status = 8;
+  google.protobuf.Timestamp status_last_updated = 9;
+  repeated Balance balances = 10;
+
+  enum Status {
+    ACTIVE = 0;
+    BLOCKED = 1;
+    DORMANT = 2;
+  }
 }
 
 message Balance {
@@ -41,4 +51,3 @@ message Balance {
 message GetAccountRequest {
   string account_id = 1;
 }
-
