@@ -18,3 +18,7 @@ jobs:
       run: |
         cd accounts
         docker build . --tag hub.docker.com/sloppycoder/ngms-account-svc:$(date +%s)
+        cd ..
+        cd benchmark
+        docker build . --tag hub.docker.com/sloppycoder/ngms-locust:$(date +%s)
+        cd ..
