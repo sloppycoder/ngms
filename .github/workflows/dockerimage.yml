@@ -24,11 +24,11 @@ jobs:
       - name: Build the Docker image
         run: |
           cd accounts
-          docker build . --tag docker.io/sloppycoder/ngms-account-svc:latest
-          docker push docker.io/sloppycoder/ngms-account-svc:latest
+          docker build . --tag sloppycoder/ngms-account-svc:latest
+          docker push sloppycoder/ngms-account-svc:latest
           cd ..
 
           cd benchmark
-          docker build . --tag docker.io/sloppycoder/ngms-locust:latest
-          docker push docker.io/sloppycoder/ngms-locust:latest
+          docker build . --tag sloppycoder/ngms-locust:latest
+          docker push sloppycoder/ngms-locust:latest
           cd ..
