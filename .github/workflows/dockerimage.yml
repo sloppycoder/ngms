@@ -17,12 +17,12 @@ jobs:
       - name: Build account service
         uses: actions/docker/cli@master
         with:
-          args: build -t sloppycoder/ngms-account-svc:latest -f accounts/Dockerfile
+          args: build -t sloppycoder/ngms-account-svc:latest accounts/
 
       - name: Build locust tester
         uses: actions/docker/cli@master
         with:
-          args: build -t sloppycoder/ngms-locust:latest -f benchmark/Dockerfile
+          args: build -t sloppycoder/ngms-locust:latest benchmark/
 
       - name: Docker Login
         uses: actions/docker/login@master
