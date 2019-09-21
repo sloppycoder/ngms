@@ -9,6 +9,6 @@ FROM gcr.io/distroless/base
 
 COPY --from=builder /build/server /
 ENV DBURI mongodb://dev:dev@db:27017/dev?authSource=dev&authMechanism=SCRAM-SHA-256
-EXPOSE 3000 3001 3002
+EXPOSE 3000 3001
 
 CMD ["/server"]
