@@ -1,5 +1,7 @@
 # next generation micro service project (ngms)
 
+[docker images published](https://github.com/sloppycoder/ngms/workflows/publish%20docker%20images/badge.svg)
+
 POC for next generation cloud native micro service using [gRPC](https://grpc.io). [grpc-gateway](https://grpc-ecosystem.github.io/grpc-gateway/) is used to translate between REST to gRPC when needed.
 
 The benefits of the architecture:

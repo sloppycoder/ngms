@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: publish docker images
 
 on:
   push:
@@ -24,11 +24,11 @@ jobs:
       - name: Build the Docker image
         run: |
           cd accounts
-          docker build . --tag hub.docker.com/sloppycoder/ngms-account-svc:latest
-          docker push hub.docker.com/sloppycoder/ngms-account-svc:lastest
+          docker build . --tag docker.io/sloppycoder/ngms-account-svc:latest
+          docker push docker.io/sloppycoder/ngms-account-svc:latest
           cd ..
 
           cd benchmark
-          docker build . --tag hub.docker.com/sloppycoder/ngms-locust:latest
-          docker push hub.docker.com/sloppycoder/ngms-locust:latest
+          docker build . --tag docker.io/sloppycoder/ngms-locust:latest
+          docker push docker.io/sloppycoder/ngms-locust:latest
           cd ..
