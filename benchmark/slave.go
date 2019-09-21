@@ -3,12 +3,16 @@ package main
 import (
 	"context"
 	"flag"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -18,22 +22,89 @@ import (
 
 var client api_pb.AccountServiceClient
 
-func randId() func() string {
-	content, err := ioutil.ReadFile("ids.txt")
+const IdFile = "ids.txt"
+
+func idsFromFile(fname string) ([]string, int) {
+	log.Print("reading ids from file...")
+
+	content, err := ioutil.ReadFile(fname)
 	if err != nil {
-		log.Fatal("cannot open ids.txt file.")
+		log.Print("cannot open ids.txt file")
+		return nil, 0
 	}
 
 	lines := strings.Split(string(content), "\n")
-	size := len(lines)
+	return lines, len(lines)
+}
+
+func readIdsFromDB() ([]string, int) {
+	log.Print("reading ids from database...")
+
+	ctx := context.Background()
+
+	dbURI := os.Getenv("DBURI")
+	if dbURI == "" {
+		dbURI = "mongodb://dev:dev@127.0.0.1:27017/dev?authSource=dev&authMechanism=SCRAM-SHA-256"
+	}
+	r, _ := regexp.Compile("mongodb://.*/(.+)\\?")
+	m := r.FindStringSubmatch(dbURI)
+	if len(m) <= 1 {
+		log.Fatalf("Cannot find dbname from DBURI %s", dbURI)
+	}
+	dbname := m[1]
+
+	clientOpts := options.Client().ApplyURI(dbURI)
+	client, err := mongo.Connect(ctx, clientOpts)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db := client.Database(dbname)
+	defer client.Disconnect(ctx)
+
+	projection := bson.D{
+		{"accountId", 1},
+		{"_id", 0},
+	}
+	cur, err := db.Collection("accounts").Find(
+		ctx, bson.D{},
+		options.Find().SetProjection(projection),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var ids []string
+	for cur.Next(ctx) {
+		var doc struct {
+			AccountId string
+		}
+		err := cur.Decode(&doc)
+		if err != nil {
+			log.Fatal(err)
+		}
+		ids = append(ids, doc.AccountId)
+	}
+
+	return ids, len(ids)
+}
+
+func randId() func() string {
+	// try to read from ids.txt file first
+	// if nothing is read then read from database
+	ids, size := idsFromFile(IdFile)
+	if size == 0 {
+		ids, size = readIdsFromDB()
+	}
 	log.Printf("using a pool of %d ids", size)
 
 	rs := rand.NewSource(time.Now().UnixNano())
 	rr := rand.New(rs)
 
 	return func() string {
-		id := strings.TrimSpace(lines[rr.Intn(size)])
+		id := strings.TrimSpace(ids[rr.Intn(size)])
 		if id == "" {
+			log.Print("Got an empty id, perhaps there's some bugs here")
 			id = "0000"
 		}
 		return id
@@ -61,10 +132,19 @@ func setupGrpcApi(name, addr string, randId func() string) func() {
 
 		if err != nil || r == nil {
 			log.Printf("account %s got error %s", id, err)
-			boomer.RecordFailure("http", name, elapsed.Nanoseconds()/int64(time.Millisecond), err.Error())
-
+			boomer.RecordFailure(
+				"http",
+				name,
+				elapsed.Nanoseconds()/int64(time.Millisecond),
+				err.Error(),
+			)
 		} else {
-			boomer.RecordSuccess("http", name, elapsed.Nanoseconds()/int64(time.Millisecond), int64(10))
+			boomer.RecordSuccess(
+				"http",
+				name,
+				elapsed.Nanoseconds()/int64(time.Millisecond),
+				int64(10),
+			)
 		}
 	}
 }
@@ -83,7 +163,12 @@ func setupRestApi(name, baseUrl string, randId func() string) func() {
 
 		if err != nil || r == nil {
 			log.Printf("HTTP GET to %s returned %s", url, err.Error())
-			boomer.RecordFailure("http", name, elapsed.Nanoseconds()/int64(time.Millisecond), err.Error())
+			boomer.RecordFailure(
+				"http",
+				name,
+				elapsed.Nanoseconds()/int64(time.Millisecond),
+				err.Error(),
+			)
 			return
 		}
 
@@ -91,11 +176,21 @@ func setupRestApi(name, baseUrl string, randId func() string) func() {
 		_, err = ioutil.ReadAll(r.Body)
 		if err != nil {
 			log.Printf("Reading response for HTTP GET %s, got error %s", url, err.Error())
-			boomer.RecordFailure("http", name, elapsed.Nanoseconds()/int64(time.Millisecond), err.Error())
+			boomer.RecordFailure(
+				"http",
+				name,
+				elapsed.Nanoseconds()/int64(time.Millisecond),
+				err.Error(),
+			)
 			return
 		}
 
-		boomer.RecordSuccess("http", name, elapsed.Nanoseconds()/int64(time.Millisecond), int64(10))
+		boomer.RecordSuccess(
+			"http",
+			name,
+			elapsed.Nanoseconds()/int64(time.Millisecond),
+			int64(10),
+		)
 	}
 }
 
