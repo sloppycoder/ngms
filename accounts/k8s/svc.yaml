@@ -5,11 +5,9 @@ metadata:
 spec:
   ports:
     - port: 3000
-      name: http
+      name: web
     - port: 3001
       name: grpc
-    - port: 3002
-      name: metrics
   type: NodePort
   selector:
     app: account
