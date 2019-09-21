@@ -24,6 +24,7 @@ func prometheusMiddleWare(next http.Handler) http.Handler {
 	handler := promhttp.Handler()
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/metrics" {
+			grpclog.Info("/metrics")
 			handler.ServeHTTP(w, r)
 			return
 		}
