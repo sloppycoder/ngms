@@ -5,6 +5,7 @@ go 1.13
 require (
 	github.com/golang/protobuf v1.3.2
 	github.com/golang/snappy v0.0.1 // indirect
+	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/grpc-ecosystem/grpc-gateway v1.8.5
 	github.com/izumin5210/grapi v0.4.2
 	github.com/jinzhu/copier v0.0.0-20190625015134-976e0346caa8
