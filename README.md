@@ -64,3 +64,10 @@ The docker public images below should work for this purpose.
 To be written. contributors welcome
 
 ```
+# populate test data 
+mongoimport --db=dev --collection=accounts < benchmark/seed.json
+
+docker run -n account-svc sloppycoder/ngms-account-svc
+docker run -n locust sloppycoder/ngms-locust
+
+```
