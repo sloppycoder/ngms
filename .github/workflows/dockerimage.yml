@@ -12,12 +12,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Log in to registry
-      uses: actions/docker/login@master
-      env:
-        DOCKER_REGISTRY_URL: hub.docker.login
-        DOCKER_USERNAME: sloppycoder
-        DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASS }}
+      - name: Log in to Docker image registry
+        uses: actions/docker/login@master
+        env:
+          DOCKER_REGISTRY_URL: hub.docker.login
+          DOCKER_USERNAME: sloppycoder
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASS }}
+
+    - uses: actions/checkout@v1
 
     - name: Build the Docker image
       run: |
