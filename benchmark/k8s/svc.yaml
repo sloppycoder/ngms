@@ -27,3 +27,6 @@ spec:
       containers:
         - name: locust
           image: gcr.io/k8s-skaffold/skaffold-locust
+#          env:
+#          - name: SLAVE_PROTO
+#            value: rest
