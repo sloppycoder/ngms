@@ -1,6 +1,6 @@
 name: Docker Image CI
 
-on: 
+on:
   push:
     branches:
       - master
@@ -8,14 +8,14 @@ on:
 jobs:
 
   build:
- 
+
     runs-on: ubuntu-latest
 
     steps:
       - name: Log in to Docker image registry
         uses: actions/docker/login@master
         env:
-          DOCKER_REGISTRY_URL: hub.docker.login
+          DOCKER_REGISTRY_URL: hub.docker.com
           DOCKER_USERNAME: sloppycoder
           DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASS }}
 
