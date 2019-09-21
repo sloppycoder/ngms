@@ -12,23 +12,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Log in to Docker image registry
-        uses: actions/docker/login@master
-        env:
-          DOCKER_REGISTRY_URL: registry.hub.docker.com
-          DOCKER_USERNAME: sloppycoder
-          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASS }}
-
       - uses: actions/checkout@v1
 
       - name: Build the Docker image
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASS }}
         run: |
+          echo $DOCKER_PASSWORD | docker login -u sloppycoder --password-stdin
+
           cd accounts
           docker build . --tag sloppycoder/ngms-account-svc:latest
           docker push sloppycoder/ngms-account-svc:latest
           cd ..
 
           cd benchmark
-          docker build . --tag sloppycoder/ngms-locust:latest
-          docker push sloppycoder/ngms-locust:latest
+          docker build . --tag sloppycoder/ngms-locust:latest && docker push sloppycoder/ngms-locust:latest
           cd ..
+
+          docker logout
