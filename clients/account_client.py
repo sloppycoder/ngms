@@ -14,7 +14,7 @@ class TestGrpcClient:
 
 
 if __name__ == '__main__':
-    id = sys.argv[1] if len(sys.argv) > 1 else '100-1122-5577-891'
+    id = sys.argv[1] if len(sys.argv) > 1 else '111'
     print('retrieving account info for ' + id)
     print('result ====>')
     client = TestGrpcClient()

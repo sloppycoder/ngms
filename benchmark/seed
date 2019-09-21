@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -o errexit
+
+if [ "$1" = "" ]; then
+    data_file=seed.json
+fi
+
+if [ "$1" != "" ]; then
+    if [ -f "$1" ]; then
+        data_file=$1
+    else
+        echo $1 does not exist.
+        exit 1
+    fi
+fi
+
+echo load seed data from $data_file
+
+python ../testdata/gen_accounts.py 1 > seed.json
+mongo -u dev -p dev dev -eval "db.accounts.drop()"
+mongoimport -u dev -p dev --db dev --collection accounts < $data_file
+mongo -u dev -p dev dev -eval 'db.accounts.find({accountId: "111"})'
+

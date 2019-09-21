@@ -205,7 +205,7 @@ func testGrpc(addr string) {
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	r, err := c.GetAccount(ctx, &api_pb.GetAccountRequest{AccountId: "100-1122-5577-891"})
+	r, err := c.GetAccount(ctx, &api_pb.GetAccountRequest{AccountId: "111"})
 	if err != nil {
 		log.Printf("error calling API: %v", err)
 	}
