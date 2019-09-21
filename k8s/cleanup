@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# run this script into minkube host for cleanup. weird things happen when disk is full
+docker images | grep locust | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} docker rmi gcr.io/k8s-skaffold/skaffold-locust:{}
+docker images | grep skaffold-account | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} docker rmi gcr.io/k8s-skaffold/skaffold-account:{}
+
+docker system prune -f
+
+exit
