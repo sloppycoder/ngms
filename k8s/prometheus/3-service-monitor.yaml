@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: api-sm
+  namespace: default
+  labels:
+    svc-group: api
+spec:
+  selector:
+    matchLabels:
+      svc-group: api
+  endpoints:
+  - port: web
+    honorLabels: true
+    interval: 10s
