@@ -14,19 +14,29 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Build the Docker image
+      - name: Build account service
+        uses: actions/docker/cli@master
+        with:
+          args: build -t sloppycoder/ngms-account-svc:latest accounts/Dockerfile
+
+      - name: Build locust tester
+        uses: actions/docker/cli@master
+        with:
+          args: build -t sloppycoder/ngms-locust:latest benchmark/Dockerfile
+
+      - name: Docker Login
+        uses: actions/docker/login@master
         env:
+          DOCKER_USERNAME: sloppycoder
           DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASS }}
-        run: |
-          echo $DOCKER_PASSWORD | docker login -u sloppycoder --password-stdin
 
-          cd accounts
-          docker build . --tag sloppycoder/ngms-account-svc:latest
-          docker push sloppycoder/ngms-account-svc:latest
-          cd ..
+      - name: Push image account-svc
+        uses: actions/docker/cli@master
+        with:
+          args: push sloppycoder/ngms-account-svc:latest
 
-          cd benchmark
-          docker build . --tag sloppycoder/ngms-locust:latest && docker push sloppycoder/ngms-locust:latest
-          cd ..
+      - name: Push image locust
+        uses: actions/docker/cli@master
+        with:
+          args: push sloppycoder/ngms-locust:latest
 
-          docker logout
