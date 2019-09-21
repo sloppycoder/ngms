@@ -194,9 +194,28 @@ func setupRestApi(name, baseUrl string, randId func() string) func() {
 	}
 }
 
+func testGrpc(addr string) {
+	conn, err := grpc.Dial(addr, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+	c := api_pb.NewAccountServiceClient(conn)
+
+	// Contact the server and print out its response.
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	r, err := c.GetAccount(ctx, &api_pb.GetAccountRequest{AccountId: "100-1122-5577-891"})
+	if err != nil {
+		log.Printf("error calling API: %v", err)
+	}
+	log.Printf("Greeting: %s", r)
+}
+
 func main() {
 	var proto string
 	flag.StringVar(&proto, "proto", "grpc", "protocol to test: rest or grpc")
+	testOnly := flag.Bool("test", false, "call gRPC API then exit, will not run as slave")
 
 	if !flag.Parsed() {
 		flag.Parse()
@@ -210,6 +229,13 @@ func main() {
 	grpcAddr := os.Getenv("GRPCSVC_ADDR")
 	if grpcAddr == "" {
 		grpcAddr = "[::]:3001"
+	}
+
+	testGrpc(grpcAddr)
+
+	if *testOnly {
+		log.Print("test only mode, exiting...")
+		os.Exit(0)
 	}
 
 	var task *boomer.Task

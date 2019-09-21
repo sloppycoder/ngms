@@ -3,11 +3,10 @@ FROM golang:1.13 as builder
 WORKDIR /build
 ADD . /build
 
-RUN go build -o /build/slaver ./slave.go
-RUN go build -o /build/client ./client.go
+RUN go build -o slave ./slave.go
 
 FROM python:3.7-slim-stretch
-COPY --from=builder /build/slave /build/client /
+COPY --from=builder /build/slave /
 
 RUN pip install locust
 ADD ./locustfile.py ./entrypoint.sh /

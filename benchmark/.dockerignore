@@ -1,0 +1,5 @@
+slave
+client
+ids.txt
+*.pyc
+
