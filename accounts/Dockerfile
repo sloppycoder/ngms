@@ -3,7 +3,7 @@ FROM golang:1.13 as builder
 WORKDIR /build
 ADD . /build
 
-RUN go build -o /build/server ./cmd/server
+RUN go build ./cmd/server
 
 FROM gcr.io/distroless/base
 
