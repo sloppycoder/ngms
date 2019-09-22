@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+    svc-group: tooling
+spec:
+  ports:
+    - port: 3000
+      name: web
+  type: NodePort
+  selector:
+    app: grafana
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+spec:
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      volumes:
+        - name: grafana-pv-storage
+          persistentVolumeClaim:
+            claimName: grafana-pv-claim
+      containers:
+        - name: grafana
+          image: grafana/grafana:latest
+          env:
+            - name: GF_INSTALL_PLUGINS 
+              value: mtanda-histogram-panel,grafana-piechart-panel
+          volumeMounts:
+            - mountPath: "/var/lib/grafana"
+              name: grafana-pv-storage
+
+

@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: accounts-api
+  labels:
+    app: accounts-api
+    svc-group: api
+spec:
+  ports:
+    - port: 3000
+      name: web
+    - port: 3001
+      name: grpc
+  type: NodePort
+  selector:
+    app: accounts-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accounts-api
+spec:
+  selector:
+    matchLabels:
+      app: accounts-api
+  template:
+    metadata:
+      labels:
+        app: accounts-api
+    spec:
+      containers:
+        - name: accounts-api
+          image: sloppycoder/ngms-account-svc:latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: locust
+  labels:
+    svc-group: tooling
+spec:
+  ports:
+    - port: 8089
+      name: web
+  type: NodePort
+  selector:
+    app: locust
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust
+spec:
+  selector:
+    matchLabels:
+      app: locust
+  template:
+    metadata:
+      labels:
+        app: locust
+    spec:
+      containers:
+        - name: locust
+          image: sloppycoder/ngms-locust:latest
+#          env:
+#          - name: SLAVE_PROTO
+#            value: rest

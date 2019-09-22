@@ -1,0 +1,30 @@
+#!/bin/bash
+
+### create static service for database
+kubectl apply -f db.yaml
+
+### run API microservice and load test pods
+kubectl apply -f ngms.yaml
+
+#### install Prometheus using operator
+kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.33/bundle.yaml
+
+
+#### grafana
+# create persistent volume for grafana
+kubectl apply -f pvc.yaml
+# start grafana
+kubectl apply -f grafana.yaml
+
+# to stop grafana delete its deployment
+# as long as the persistent volume claim is not deleted the data persisted
+# kubectl delete deploy grafana
+
+
+#### create prometheus instance
+# create prometheus service account and instance
+# takes a while to pull the images and setup the operator, 
+# if errors is returned just wait a 10 seconds and try again
+kubectl apply -f prometheus/
+
+

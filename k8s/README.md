@@ -11,11 +11,15 @@ kubectl apply -f db.yaml
 cat cleanup | minikube ssh
 ```
 
-### use Prometheus operator to collect metrics from API server
+### To run the whole setup include Prometheus and Grafna with minikube
 ```
-# stay tuned
+# make sure to edit db.yaml first, and populate some seed data, then
+./all
 
+# open browser to url displayed below to see locust UI
+minikube service locust --url
+
+# open browser to url displayed below to see Grafana
+minikube service grafana --url
 
 ``` 
-
-

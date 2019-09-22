@@ -24,38 +24,31 @@ The benefits of the architecture:
 3. [miniconda](https://docs.conda.io/en/latest/miniconda.html) for generating test data. Any [Python](https://www.python.org/downloads/) 3.7 installation will do
 4. [minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/), your local Kubernetes cluster for testing
 5. [skaffold](https://skaffold.dev/), think of ```npm serve``` for K8S development
-
-Public docker images are created using [GitHuab actions](https://github.com/features/actions) workflow.
+6. [GitHuab actions](https://github.com/features/actions) workflow is used to build docker images on DockerHub.
 
 ## Create dev database and populate with seed data
-Install minikube, skaffold and MongoDB server and tools first. Then
+Install [MongoDB server 4.2](https://www.mongodb.com/download-center/community) then 
 
 ```
 # populate test data 
 cd benchmark
 ./seed
 # this will import 1 json document into dev db, accounts collection
+```
 
-# start account svc
-cd accounts
-skaffold run
+## Quick Start
+To quickly try the setup including Prometheus and Grafana but without installing Go and compile and etc,
 
-# should see some output like 
-Deploy complete in 248.007266ms
-You can also run [skaffold run --tail] to get the logs
-
-cd ../benchmark
-skaffold run
-# similar output to above
+1. [minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/)
+2. make sure your /etc/hosts contain an entry called vmhost.localm which is used by db.yaml
+3. Run ```cd k8s; ./all```
+4. Open browser to grafana and Locust by getting url with
+```
+minikube service grafana --url
 
 minikube service locust --url
-# should display something like
-http://192.168.39.32:3233
 
-# open browser and point to the URL above, start new test, enter 1 for number of users and 1 as hatch rate, click on Start Swarming
-
-
-```
+``` 
 
 ## Run this with Docker without Kubernetes
 The docker public images below should work for this purpose.
@@ -66,7 +59,8 @@ The docker public images below should work for this purpose.
 To be written. contributors welcome
 
 ```
-# populate test data 
+# these steps are not yet tesed
+# populate test data.. 
 mongoimport --db=dev --collection=accounts < benchmark/seed.json
 
 docker run -n account-svc sloppycoder/ngms-account-svc
