@@ -49,16 +49,17 @@ var (
 	})
 
 	getAccountHisto = promauto.NewHistogram(prometheus.HistogramOpts{
-		Name:    "get_account_success_histogram",
-		Help:    "histogram for successful fetch account from database",
-		Buckets: []float64{5, 20, 50, 100, 200, 500, 1000, 2000, 5000},
+		Name: "get_account_success_histogram",
+		Help: "histogram for successful fetch account from database",
+		// used to store microseconds
+		Buckets: []float64{100, 250, 500, 1_000, 2_500, 5_000, 10_000, 25_000, 50_000, 100_000, 2_500_000},
 	})
 )
 
 func GetAccountById(ctx context.Context, id string) (*api_pb.Account, error) {
-	start := time.Now()
 
 	db := db(ctx)
+	start := time.Now()
 	cur := db.Collection("accounts").FindOne(ctx, bson.M{"accountId": id})
 
 	if err := cur.Err(); err != nil {
@@ -80,7 +81,7 @@ func GetAccountById(ctx context.Context, id string) (*api_pb.Account, error) {
 
 	getAccountSuccess.Inc()
 	elapsed := time.Since(start)
-	getAccountHisto.Observe(float64(elapsed) / 1_000) // millisecond
+	getAccountHisto.Observe(float64(elapsed / time.Microsecond))
 
 	return account, nil
 }
