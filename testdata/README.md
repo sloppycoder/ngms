@@ -53,3 +53,29 @@ mongo -eval ' db.accounts.createIndex({accountId: 1}) '  0.12s user 0.04s system
 
 
 ```
+
+### last tested
+AWS EKS
+
+* AWS EKS worker node m5.large
+* Mongo on Bitnami image m5ad.2xlarge with local SSD
+* 10m test accounts
+
+locust
+ * client:5
+ * TPS REST: 4200
+ * TPS gRPC: 5100
+ 
+ MSI GF63 laptop, single node
+ * core 5 4-core CPU, 16G RAM, SSD 512G
+ * ubuntu 18.04 minikube 1.3.1 with K8S 1.13.11
+
+ locust
+  * client:5
+  * TPS REST: 5200
+  * TPS gRPC: 7000
+  
+  
+ 
+ 
+ 
