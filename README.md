@@ -53,8 +53,8 @@ minikube service locust --url
 ## Run this with Docker without Kubernetes
 The docker public images below should work for this purpose.
 
-* [ngms-account-svc]() 
-* [ngms-locust]() 
+* [ngms/account-svc](https://github.com/sloppycoder/ngms/packages/account-svc) 
+* [ngms/benchmark](https://github.com/sloppycoder/ngms/packages/benchmark) 
 
 To be written. contributors welcome
 
