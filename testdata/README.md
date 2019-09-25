@@ -12,13 +12,10 @@ pip install mimesis
 python gen_accounts.py 100 > test_accounts.json
 
 # import test data into database
-mongoimport host/database < test_accounts.json
+mongoimport -u dev -p dev dev --db=dev --collection=accounts < test_accounts.json
 
 #create index 
-mongo -eval ' db.accounts.createIndex({accountId: 1}) '
-
-# export account id into a text file to be used by load generator
-mongo host/database --quiet account_ids.js > account_ids.txt
+mongo -u dev -p dev dev -eval ' db.accounts.createIndex({accountId: 1}) '
 
 ```
 
@@ -74,8 +71,4 @@ locust
   * client:5
   * TPS REST: 5200
   * TPS gRPC: 7000
-  
-  
- 
- 
  
