@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/asaskevich/EventBus v0.0.0-20180315140547-d46933a94f05 // indirect
+	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/google/uuid v1.1.1 // indirect
 	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/myzhan/boomer v0.0.0-20190713082008-307abf52aca9

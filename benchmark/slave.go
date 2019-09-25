@@ -16,6 +16,7 @@ import (
 	"strings"
 	"time"
 
+	humanize "github.com/dustin/go-humanize"
 	"github.com/myzhan/boomer"
 	api_pb "github.com/sloppycoder/ngms/accounts/api"
 )
@@ -96,7 +97,7 @@ func randId() func() string {
 	if size == 0 {
 		ids, size = readIdsFromDB()
 	}
-	log.Printf("using a pool of %d ids", size)
+	log.Printf("using a pool of %s ids", humanize.Comma(int64(size)))
 
 	rs := rand.NewSource(time.Now().UnixNano())
 	rr := rand.New(rs)
