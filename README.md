@@ -24,16 +24,16 @@ The benefits of the architecture:
 3. [miniconda](https://docs.conda.io/en/latest/miniconda.html) for generating test data. Any [Python](https://www.python.org/downloads/) 3.7 installation will do
 4. [minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/), your local Kubernetes cluster for testing
 5. [skaffold](https://skaffold.dev/), think of ```npm serve``` for K8S development
-6. [GitHuab actions](https://github.com/features/actions) workflow is used to build docker images on DockerHub.
+6. [GitHuab actions](https://github.com/features/actions) workflow is used to build and publish docker images on [Github Package Registry](https://github.com/features/package-registry).
 
 ## Create dev database and populate with seed data
 Install [MongoDB server 4.2](https://www.mongodb.com/download-center/community) then 
 
 ```
 # populate test data 
-cd benchmark
-./seed
 # this will import 1 json document into dev db, accounts collection
+cd benchmark
+mongoimport -u dev -p dev --db=dev --collection=accounts < benchmark/seed.json
 ```
 
 ## Quick Start
@@ -53,15 +53,15 @@ minikube service locust --url
 ## Run this with Docker without Kubernetes
 The docker public images below should work for this purpose.
 
-* [ngms-account-svc](https://cloud.docker.com/u/sloppycoder/repository/docker/sloppycoder/ngms-account-svc) 
-* [ngms-locust](https://cloud.docker.com/u/sloppycoder/repository/docker/sloppycoder/ngms-locust) 
+* [ngms-account-svc]() 
+* [ngms-locust]() 
 
 To be written. contributors welcome
 
 ```
 # these steps are not yet tesed
 # populate test data.. 
-mongoimport --db=dev --collection=accounts < benchmark/seed.json
+mongoimport -u dev -p dev --db=dev --collection=accounts < benchmark/seed.json
 
 docker run -n account-svc sloppycoder/ngms-account-svc
 docker run -n locust sloppycoder/ngms-locust
