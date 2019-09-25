@@ -53,8 +53,8 @@ minikube service locust --url
 ## Run this with Docker without Kubernetes
 The docker public images below should work for this purpose.
 
-* [ngms/account-svc](https://github.com/sloppycoder/ngms/packages/account-svc) 
-* [ngms/benchmark](https://github.com/sloppycoder/ngms/packages/benchmark) 
+* [ngms/account-svc](https://github.com/sloppycoder/ngms/packages/account-svc/26706) 
+* [ngms/benchmark](https://github.com/sloppycoder/ngms/packages/benchmark/26707) 
 
 To be written. contributors welcome
 
@@ -63,7 +63,8 @@ To be written. contributors welcome
 # populate test data.. 
 mongoimport -u dev -p dev --db=dev --collection=accounts < benchmark/seed.json
 
-docker run -n account-svc sloppycoder/ngms-account-svc
-docker run -n locust sloppycoder/ngms-locust
+docker run -n account-svc docker.pkg.github.com/sloppycoder/ngms/account-svc:latest
+docker run -n locust docker.pkg.github.com/sloppycoder/ngms/benchmark:latest
+
 
 ```

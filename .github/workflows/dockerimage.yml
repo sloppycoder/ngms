@@ -36,7 +36,7 @@ jobs:
         with:
           args: push docker.pkg.github.com/sloppycoder/ngms/account-svc:latest
 
-      - name: Push image locust
+      - name: Push image benchmark
         uses: actions/docker/cli@master
         with:
           args: push docker.pkg.github.com/sloppycoder/ngms/benchmark:latest
