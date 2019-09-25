@@ -34,10 +34,10 @@ jobs:
       - name: Push image account-svc
         uses: actions/docker/cli@master
         with:
-          args: push sloppycoder/ngms-account-svc:latest
+          args: push docker.pkg.github.com/sloppycoder/ngms-account-svc:latest
 
       - name: Push image locust
         uses: actions/docker/cli@master
         with:
-          args: push sloppycoder/ngms-locust:latest
+          args: push docker.pkg.github.com/sloppycoder/ngms-locust:latest
 
