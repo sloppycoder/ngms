@@ -2,8 +2,7 @@
 
 ### install tools
 ```
- conda install -c conda-forge grpcio-tools
- conda install -c conda-forge googleapis-common-protocs-grpc
+ pip install grpcio grpcio-tools googleapis-common-protos
 
 ```
 
@@ -15,20 +14,30 @@ python account_client.py <optional_account_id>
 
 # should print out something like below
 
-...
-retrieving account info for 4548759848
+retrieving account info for 111
 result ====>
-id: "5d836a5d02565e5a8db60c1c"
-account_id: "4548759848"
-prod_code: "1002"
-prod_name: "Salary Plus Account"
-balances {
-  amount: 148612.8812
+id: "5d8b11a9495b11be00f1a225"
+account_id: "111"
+nickname: "Heath"
+prod_code: "1001"
+prod_name: "Super Saver Account"
+currency: "THB"
+servicer: "6631"
+status_last_updated {
+  seconds: 1547249339
 }
 balances {
-  amount: 148612.8812
+  amount: 4777342.7365
+  last_updated {
+    seconds: 1547249339
+  }
 }
-
+balances {
+  amount: 4777342.7365
+  last_updated {
+    seconds: 1547249339
+  }
+}
 
 ```
 

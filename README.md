@@ -21,10 +21,10 @@ The benefits of the architecture:
 ## Tools used in this repo
 1. [Go 1.13](https://golang.org/dl/)
 2. [MongoDB server 4.2](https://www.mongodb.com/download-center/community)
-3. [miniconda](https://docs.conda.io/en/latest/miniconda.html) for generating test data. Any [Python](https://www.python.org/downloads/) 3.7 installation will do
-4. [minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/), your local Kubernetes cluster for testing
-5. [skaffold](https://skaffold.dev/), think of ```npm serve``` for K8S development
-6. [GitHuab actions](https://github.com/features/actions) workflow is used to build and publish docker images on [Github Package Registry](https://github.com/features/package-registry).
+test data. Any [Python](https://www.python.org/downloads/) 3.7 installation will do
+3. [minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/), your local Kubernetes cluster for testing
+4. [skaffold](https://skaffold.dev/), think of ```npm serve``` for K8S development
+5. [GitHuab actions](https://github.com/features/actions) workflow is used to build and publish docker images on [Github Package Registry](https://github.com/features/package-registry).
 
 ## Create dev database and populate with seed data
 Install [MongoDB server 4.2](https://www.mongodb.com/download-center/community) then 

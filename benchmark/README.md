@@ -4,7 +4,7 @@ Use [Locust.io](http://locust.io) to benchmark API.
 
 ### install
 ```
- conda install -c conda-forge locust
+ pip install locust
 
 ```
 

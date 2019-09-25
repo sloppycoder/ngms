@@ -19,3 +19,6 @@ benchmark/ids.txt
 **/bin/*
 accounts/server
 benchmark/slave
+
+#python virtual environment
+pyenv/
