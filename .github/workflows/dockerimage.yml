@@ -17,12 +17,12 @@ jobs:
       - name: Build account service
         uses: actions/docker/cli@master
         with:
-          args: build -t docker.pkg.github.com/sloppycoder/ngms-account-svc:latest accounts/
+          args: build -t docker.pkg.github.com/sloppycoder/ngms/account-svc:latest accounts/
 
       - name: Build locust tester
         uses: actions/docker/cli@master
         with:
-          args: build -t docker.pkg.github.com/sloppycoder/ngms-locust:latest benchmark/
+          args: build -t docker.pkg.github.com/sloppycoder/ngms/benchmark:latest benchmark/
 
       - name: Docker Login
         uses: actions/docker/login@master
@@ -34,10 +34,10 @@ jobs:
       - name: Push image account-svc
         uses: actions/docker/cli@master
         with:
-          args: push docker.pkg.github.com/sloppycoder/ngms-account-svc:latest
+          args: push docker.pkg.github.com/sloppycoder/ngms/account-svc:latest
 
       - name: Push image locust
         uses: actions/docker/cli@master
         with:
-          args: push docker.pkg.github.com/sloppycoder/ngms-locust:latest
+          args: push docker.pkg.github.com/sloppycoder/ngms/benchmark:latest
 

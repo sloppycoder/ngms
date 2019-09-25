@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
         - name: accounts-api
-          image: docker.pkg.github.com/sloppycoder/ngms-account-svc:latest
+          image: docker.pkg.github.com/sloppycoder/ngms/account-svc:latest
 
 ---
 apiVersion: v1
@@ -64,7 +64,7 @@ spec:
     spec:
       containers:
         - name: locust
-          image: docker.pkg.github.com/sloppycoder/ngms-locust:latest
+          image: docker.pkg.github.com/sloppycoder/ngms/benchmark:latest
 #          env:
 #          - name: SLAVE_PROTO
 #            value: rest
