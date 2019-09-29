@@ -89,7 +89,7 @@ func GetAccountById(ctx context.Context, id string) (*api_pb.Account, error) {
 func mapAccount(acc *Account) (*api_pb.Account, error) {
 	var account api_pb.Account
 
-	copier.Copy(&account, &acc)
+	_ = copier.Copy(&account, &acc)
 	account.Id = acc.Id.String()[10:34] // strip off the ObjectId("...")
 
 	var err error
