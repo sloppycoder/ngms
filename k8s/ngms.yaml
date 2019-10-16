@@ -32,6 +32,8 @@ spec:
       containers:
         - name: accounts-api
           image: docker.pkg.github.com/sloppycoder/ngms/account-svc:latest
+      imagePullSecrets:
+        - name: github-cred
 
 ---
 apiVersion: v1
@@ -68,3 +70,5 @@ spec:
 #          env:
 #          - name: SLAVE_PROTO
 #            value: rest
+      imagePullSecrets:
+        - name: github-cred
